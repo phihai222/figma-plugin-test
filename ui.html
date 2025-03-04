@@ -40,12 +40,12 @@ onmessage = (event) => {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'node-structure.json';
+
+        const timestamp = new Date().getTime();
+        a.download = `node-structure-${timestamp}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-
-        //TODO cache previous data
     }
 };
 
