@@ -19,4 +19,34 @@ document.getElementById('log-data').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'logging' } }, '*')
 }
 
+let previousUrl;
+
+onmessage = (event) => {
+    const message = event.data.pluginMessage;
+
+    if (message.type === 'save-json') {
+        const data = message.data;
+        const json = JSON.stringify(data, null, 2);
+
+        console.log("UI Data::", json)
+
+        if (previousUrl) {
+            URL.revokeObjectURL(previousUrl);
+        }
+
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        previousUrl = url;
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'node-structure.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        //TODO cache previous data
+    }
+};
+
 </script>
